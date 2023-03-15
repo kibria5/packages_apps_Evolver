@@ -188,6 +188,12 @@
             android:summary="@string/qs_show_auto_brightness_summary"
             android:defaultValue="true" />
 
+        <com.evolution.settings.preference.SystemSettingSwitchPreference
+            android:title="Brightness Percentage"
+            android:key="ANCIENT_TEXT_BRIGHTNESS"
+            android:summary="show hide brightness percentage text"
+            android:defaultValue="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
