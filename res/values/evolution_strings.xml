@@ -1224,4 +1224,11 @@
     <!-- Volume haptic feedback -->
     <string name="volume_panel_haptic_feedback_title">Volume haptic feedback</string>
     <string name="volume_panel_haptic_feedback_summary">Enable volume haptic feedback when adjust volume</string>
+
+    <!-- Volume TextView -->
+    <string name="volume_persen_switch_title">Volume Percentage</string>
+    <string name="volume_persen_switch_summary">show volume panel percentage</string>
+    <string name="volume_persen_style_title">Percentage Location</string>
+    <string name="volume_persen_style_top">Top</string>
+    <string name="volume_persen_style_bottom">Bottom</string>
 </resources>

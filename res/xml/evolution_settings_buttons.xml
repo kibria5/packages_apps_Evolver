@@ -88,6 +88,22 @@
             android:title="@string/volume_rocker_wake_title"
             android:defaultValue="false" />
 
+        <com.evolution.settings.preference.SystemSettingSwitchPreference
+            android:key="VOLUME_TEXTVIEW"
+            android:title="@string/volume_persen_switch_title"
+            android:summary="@string/volume_persen_switch_summary"
+            android:defaultValue="false" />
+
+        <com.evolution.settings.preference.SystemSettingSwitchPreference
+            android:key="VOLUME_TEXTVIEW_STYLE"                                                   
+            android:title="@string/volume_persen_style_title"
+            android:summary="%s"
+            android:dialogTitle="@string/volume_persen_style_title"
+            android:entries="@array/volume_persen_style_entries"
+            android:dependency="VOLUME_TEXTVIEW"                                                     
+            android:entryValues="@array/volume_persen_style_values"
+            android:defaultValue="0" />    
+
         <com.evolution.settings.preference.SystemSettingListPreference
             android:key="volume_key_cursor_control"
             android:summary="%s"
