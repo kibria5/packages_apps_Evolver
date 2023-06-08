@@ -18,11 +18,16 @@
  */
 package com.evolution.settings.fragments;
 
+import static android.os.UserHandle.USER_CURRENT;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.om.IOverlayManager;
 import android.database.ContentObserver;
 import android.os.Bundle;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.Handler;
 import android.os.SystemProperties;
 import android.os.UserHandle;
@@ -45,6 +50,7 @@ import com.android.internal.util.hwkeys.ActionConstants;
 import com.android.internal.util.hwkeys.ActionUtils;
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
+import com.evolution.settings.preference.SystemSettingListPreference;
 import com.android.settings.Utils;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settingslib.search.SearchIndexable;
@@ -107,6 +113,18 @@ public class Buttons extends ActionFragment implements
 
     private Handler mHandler;
 
+    private static final String VOLUMEBAR_STYLES = "VOLUME_BAR_STYLES";
+
+    private static final String VOLUMEBAR_OVERLAY_STYLE1 = "com.custom.overlay.systemui.volume1";
+    private static final String VOLUMEBAR_OVERLAY_STYLE2 = "com.custom.overlay.systemui.volume2"; 
+    private static final String VOLUMEBAR_OVERLAY_STYLE3 = "com.custom.overlay.systemui.volume3";        
+    private static final String VOLUMEBAR_OVERLAY_STYLE4 = "com.custom.overlay.systemui.volume4"; 
+    private static final String VOLUMEBAR_OVERLAY_STYLE5 = "com.custom.overlay.systemui.volume5";
+
+    private SystemSettingListPreference CustomVolumeStyle;
+    private IOverlayManager mOverlayService; 
+    private Context mContext;
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -115,6 +133,19 @@ public class Buttons extends ActionFragment implements
         final Resources res = getResources();
         final ContentResolver resolver = getActivity().getContentResolver();
         final PreferenceScreen prefScreen = getPreferenceScreen();
+        mContext = getActivity();
+        final PreferenceScreen screen = getPreferenceScreen();
+
+        mOverlayService = IOverlayManager.Stub
+                .asInterface(ServiceManager.getService(Context.OVERLAY_SERVICE));
+
+        CustomVolumeStyle = (SystemSettingListPreference) findPreference("VOLUME_BAR_STYLES");
+        int CuVolumeStyle = Settings.System.getIntForUser(getContentResolver(),
+                "VOLUME_BAR_STYLES", 0, UserHandle.USER_CURRENT);
+        int valueIndexvol = CustomVolumeStyle.findIndexOfValue(String.valueOf(CuVolumeStyle));
+        CustomVolumeStyle.setValueIndex(valueIndexvol >= 0 ? valueIndexvol : 0);
+        CustomVolumeStyle.setSummary(CustomVolumeStyle.getEntry());
+        CustomVolumeStyle.setOnPreferenceChangeListener(this);
 
         mHandler = new Handler();
 
@@ -220,6 +251,54 @@ public class Buttons extends ActionFragment implements
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         ContentResolver resolver = getActivity().getContentResolver();
+        if (preference == CustomVolumeStyle) {
+            int VolumeStyle = Integer.valueOf((String) newValue);
+            Settings.System.putIntForUser(getContentResolver(),
+                    "VOLUME_BAR_STYLES", VolumeStyle, UserHandle.USER_CURRENT);
+            CustomVolumeStyle.setSummary(CustomVolumeStyle.getEntries()[VolumeStyle]);
+                if (VolumeStyle == 0) {
+                   try {
+                      mOverlayService.setEnabled(VOLUMEBAR_OVERLAY_STYLE1, false, USER_CURRENT);
+                      mOverlayService.setEnabled(VOLUMEBAR_OVERLAY_STYLE2, false, USER_CURRENT);
+                      mOverlayService.setEnabled(VOLUMEBAR_OVERLAY_STYLE3, false, USER_CURRENT);
+                      mOverlayService.setEnabled(VOLUMEBAR_OVERLAY_STYLE4, false, USER_CURRENT);
+                      mOverlayService.setEnabled(VOLUMEBAR_OVERLAY_STYLE5, false, USER_CURRENT);     
+                   } catch (RemoteException re) {
+                      throw re.rethrowFromSystemServer();
+                   }
+               } else if (VolumeStyle == 1) {
+                   try {
+                      mOverlayService.setEnabledExclusiveInCategory(VOLUMEBAR_OVERLAY_STYLE1, USER_CURRENT);   
+                   } catch (RemoteException re) {
+                      throw re.rethrowFromSystemServer();
+                   }
+               } else if (VolumeStyle == 2) {
+                   try {
+                      mOverlayService.setEnabledExclusiveInCategory(VOLUMEBAR_OVERLAY_STYLE2, USER_CURRENT);   
+                   } catch (RemoteException re) {
+                      throw re.rethrowFromSystemServer();
+                   }
+                } else if (VolumeStyle == 3) {
+                   try {
+                      mOverlayService.setEnabledExclusiveInCategory(VOLUMEBAR_OVERLAY_STYLE3, USER_CURRENT);     
+                   } catch (RemoteException re) {
+                      throw re.rethrowFromSystemServer();
+                   }
+                } else if (VolumeStyle == 4) {
+                   try {
+                      mOverlayService.setEnabledExclusiveInCategory(VOLUMEBAR_OVERLAY_STYLE4, USER_CURRENT);     
+                   } catch (RemoteException re) {
+                      throw re.rethrowFromSystemServer();
+                   }
+                } else if (VolumeStyle == 5) {
+                   try {
+                      mOverlayService.setEnabledExclusiveInCategory(VOLUMEBAR_OVERLAY_STYLE5, USER_CURRENT);     
+                   } catch (RemoteException re) {
+                      throw re.rethrowFromSystemServer();
+                   }
+                }    
+            return true;
+          }
         if (preference == mHwKeyDisable) {
             boolean value = (Boolean) newValue;
             Settings.System.putInt(getContentResolver(), Settings.System.HARDWARE_KEYS_DISABLE,
@@ -273,6 +352,11 @@ public class Buttons extends ActionFragment implements
         f.setTargetFragment(this, 0);
         f.show(getFragmentManager(), "dialog_preference");
         onDialogShowing();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

@@ -105,6 +105,15 @@
             android:defaultValue="0" />    
 
         <com.evolution.settings.preference.SystemSettingListPreference
+            android:key="VOLUME_BAR_STYLES"                                                    
+            android:title="@string/volumebar_style_title"
+            android:summary="%s"
+            android:dialogTitle="@string/volumebar_style_title"
+            android:entries="@array/volumebar_style_entries"
+            android:entryValues="@array/volumebar_style_values"
+            android:defaultValue="0" /> 
+
+        <com.evolution.settings.preference.SystemSettingListPreference
             android:key="volume_key_cursor_control"
             android:summary="%s"
             android:title="@string/volume_key_cursor_control_title"
