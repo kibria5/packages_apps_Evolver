@@ -192,7 +192,7 @@
             android:title="Brightness Percentage"
             android:key="ANCIENT_TEXT_BRIGHTNESS"
             android:summary="show hide brightness percentage text"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
 
     </PreferenceCategory>
 

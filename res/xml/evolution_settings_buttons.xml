@@ -92,7 +92,7 @@
             android:key="VOLUME_TEXTVIEW"
             android:title="@string/volume_persen_switch_title"
             android:summary="@string/volume_persen_switch_summary"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
 
         <com.evolution.settings.preference.SystemSettingSwitchPreference
             android:key="VOLUME_TEXTVIEW_STYLE"                                                   
